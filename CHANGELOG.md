@@ -1,3 +1,7 @@
+## 0.0.4
+- Rename 'platforms/android/build/' to 'platforms/android/builds/'
+
+
 ## 0.0.3
 - Add missing folder 'platforms/android/build/'
 

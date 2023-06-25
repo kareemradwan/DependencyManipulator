@@ -1,5 +1,5 @@
-export 'build/android_build_interface.dart';
-export 'build/android_build_manager.dart';
+export 'builds/android_build_interface.dart';
+export 'builds/android_build_manager.dart';
 
 export 'library/android_library.dart';
 export 'library/android_library_interface.dart';

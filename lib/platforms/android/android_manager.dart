@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'build/android_build_manager.dart';
+import 'builds/android_build_manager.dart';
 import 'library/android_library.dart';
 import 'library/android_library_interface.dart';
 import 'library/android_library_manager.dart';

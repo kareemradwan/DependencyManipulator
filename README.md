@@ -1,5 +1,8 @@
 Manipulate you Dependencies as a Game
 
+`PART OF GTC OPEN SOURCE INTIATIVE`
+
+
 ## Features
 
 List Android Libraries with versions.

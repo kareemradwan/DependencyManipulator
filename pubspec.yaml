@@ -1,13 +1,12 @@
 name: dependency_manipulator
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
-homepage: https://github.com/onestudio-co/flutter-bond
+description: Manipulate you Dependencies as a Game.
+version: 0.0.1
+homepage: https://github.com/kareemradwan/DependencyManipulator
 
 environment:
   sdk: '>=2.18.1 <3.0.0'
 
 dependencies:
-  args: ^2.2.2
   xml: ^5.4.0
   yaml_edit: ^2.1.0
   yaml: ^3.1.1

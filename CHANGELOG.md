@@ -1,3 +1,7 @@
+## 0.0.5
+- Update README file
+
+
 ## 0.0.4
 - Rename 'platforms/android/build/' to 'platforms/android/builds/'
 

@@ -1,5 +1,8 @@
 abstract class AndroidBuildInterface {
   Future<bool> build();
 
-  Future<void> prepareEnv();
+  Future<void> prepareEnv(
+      {String? minSdkVersion,
+      String? targetSdkVersion,
+      String? compileSdkVersion});
 }

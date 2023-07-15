@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'builds/android_build_interface.dart';
 import 'builds/android_build_manager.dart';
 import 'library/android_library.dart';
 import 'library/android_library_interface.dart';
@@ -17,13 +18,12 @@ class AndroidManager
         AndroidPluginInterface,
         AndroidLibraryInterface,
         ManifestInterface,
-        AndroidBuildManager {
-  Directory _android;
-
-  late AndroidPluginManager _pluginManager;
-  late AndroidLibraryManager _libraryManager;
-  late ManifestManager _manifestManager;
-  late AndroidBuildManager _buildManager;
+        AndroidBuildInterface {
+  late final Directory _android;
+  late final AndroidPluginInterface _pluginManager;
+  late final AndroidLibraryInterface _libraryManager;
+  late final ManifestInterface _manifestManager;
+  late final AndroidBuildInterface _buildManager;
 
   AndroidManager(this._android) {
     var pluginBuildFile = File("${_android.path}/build.gradle");
@@ -47,7 +47,7 @@ class AndroidManager
     }
     _manifestManager = ManifestManager(manifestFile);
 
-    _buildManager = AndroidBuildManager();
+    _buildManager = AndroidBuildManager(_android);
   }
 
   @override
@@ -153,9 +153,14 @@ class AndroidManager
 
   @override
   Future<void> prepareEnv(
-      {String? minSdkVersion,
+      {String? applicationId,
+      String? minSdkVersion,
       String? targetSdkVersion,
       String? compileSdkVersion}) async {
-    return await _buildManager.prepareEnv();
+    return await _buildManager.prepareEnv(
+        applicationId: applicationId,
+        minSdkVersion: minSdkVersion,
+        targetSdkVersion: targetSdkVersion,
+        compileSdkVersion: compileSdkVersion);
   }
 }

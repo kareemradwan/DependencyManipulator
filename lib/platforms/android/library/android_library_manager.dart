@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import '../../../../util/console.dart';
@@ -7,7 +8,7 @@ import 'android_library.dart';
 import 'android_library_interface.dart';
 
 class AndroidLibraryManager implements AndroidLibraryInterface {
-  File buildFile;
+  final File buildFile;
   final Map<int, AndroidLibrary> _cache = {};
 
   AndroidLibraryManager(this.buildFile);
@@ -20,25 +21,25 @@ class AndroidLibraryManager implements AndroidLibraryInterface {
     if (result.isEmpty) {
       return [];
     }
-    List<AndroidLibrary> libs = [];
-    for (var element in result) {
-      var rawLibrary = element.line
+    final List<AndroidLibrary> libs = [];
+    for (final element in result) {
+
+      final rawLibrary = element.line
           .trim()
           .replaceAll("implementation ", "")
           .replaceAll("'", "")
           .replaceAll('"', '');
 
       if (rawLibrary != '') {
-        var parts = rawLibrary.split(":");
+        final parts = rawLibrary.split(":");
         var libraryVersion = parts.removeLast();
-        var libraryName = parts.join(":");
+        final libraryName = parts.join(":");
 
         if (libraryVersion.startsWith("\$")) {
-          var resolveVersionResult =
-              await File("${Directory.current.path}/android/build.gradle")
-                  .search("ext.${libraryVersion.replaceAll("\$", "")}");
+          final resolveVersionResult = await buildFile
+              .search("ext.${libraryVersion.replaceAll("\$", "")}");
           if (resolveVersionResult.isNotEmpty) {
-            var version = resolveVersionResult[0]
+            final version = resolveVersionResult[0]
                 .line
                 .replaceAll("ext.${libraryVersion.replaceAll("\$", "")} = ", "")
                 .replaceAll("'", "")
@@ -47,7 +48,7 @@ class AndroidLibraryManager implements AndroidLibraryInterface {
           }
         }
 
-        var library =
+        final library =
             AndroidLibrary(libraryName, version: libraryVersion.trim());
         libs.add(library);
         _cache[element.index] = library;
@@ -190,7 +191,6 @@ class AndroidLibraryManager implements AndroidLibraryInterface {
 
     var insertedIndex = result.last.index;
     Map<int, String> linesIndex = await buildFile.linesIndexed();
-
 
     for (var element in linesIndex.values) {
       if (element.contains("apply") && element.contains(plugin.name)) {

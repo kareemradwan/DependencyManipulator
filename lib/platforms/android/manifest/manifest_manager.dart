@@ -22,7 +22,6 @@ class ManifestManager implements ManifestInterface {
 
   @override
   Future<AndroidManifest> getManifest() async {
-    // TODO: implement getManifest
     return _manifest;
   }
 

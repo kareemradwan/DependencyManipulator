@@ -5,10 +5,14 @@ import '../../../../util/file.dart';
 import 'android_build_interface.dart';
 
 class AndroidBuildManager implements AndroidBuildInterface {
+  final Directory androidDirectory;
+
+  AndroidBuildManager(this.androidDirectory);
+
   @override
   Future<bool> build() async {
-    var result =
-        await Process.run('bash', ['-c', 'cd android && ./gradlew build']);
+    var result = await Process.run(
+        'bash', ['-c', 'cd ${androidDirectory.path} && ./gradlew build']);
 
     if (result.exitCode != 0) {
       printError("android build: error    =>\n${result.stderr}");
@@ -16,50 +20,59 @@ class AndroidBuildManager implements AndroidBuildInterface {
     return result.exitCode == 0;
   }
 
-  @override
-  Future<void> prepareEnv(
-      {String? minSdkVersion,
-      String? targetSdkVersion,
-      String? compileSdkVersion}) async {
-    var buildFile = File("${Directory.current.path}/android/app/build.gradle");
 
+  @override
+  Future<void> prepareEnv({
+    String? applicationId,
+    String? minSdkVersion,
+    String? targetSdkVersion,
+    String? compileSdkVersion,
+  }) async {
+    final buildFile = File("${androidDirectory.path}/app/build.gradle");
     if (!buildFile.existsSync()) {
       throw Exception(
           "Error on Configure android, missing file: /android/app/build.gradle");
     }
 
-    var lines = await buildFile.linesIndexed();
-    MapEntry minSdkVersionMap = const MapEntry(-1, "");
-    MapEntry targetSdkVersionMap = const MapEntry(-1, "");
-    MapEntry compileSdkVersionMap = const MapEntry(-1, "");
+    var content = await buildFile.readAsString();
 
-    lines.forEach((key, value) {
-      if (value.contains("minSdkVersion")) {
-        minSdkVersionMap = MapEntry(key, value);
+    // Replace applicationId
+    if (applicationId != null) {
+      var match = RegExp(r'applicationId "[^"]+"').firstMatch(content);
+      if (match == null) {
+        throw Exception('Error: applicationId not found in build.gradle file');
       }
-
-      if (value.contains("targetSdkVersion")) {
-        targetSdkVersionMap = MapEntry(key, value);
-      }
-      if (value.contains("compileSdkVersion")) {
-        compileSdkVersionMap = MapEntry(key, value);
-      }
-    });
-
-    if (minSdkVersionMap.key == -1 ||
-        targetSdkVersionMap.key == -1 ||
-        compileSdkVersionMap.key == -1) {
-      throw Exception(
-          "Error on Configure android, invalid content of  /android/app/build.gradle missing one of the following: [minSdkVersionMap, targetSdkVersionMap, compileSdkVersion]");
+      content = content.replaceRange(
+        match.start,
+        match.end,
+        'applicationId "$applicationId"',
+      );
     }
 
-    lines[minSdkVersionMap.key] =
-        "        minSdkVersion ${minSdkVersion ?? 22}";
-    lines[targetSdkVersionMap.key] =
-        "        targetSdkVersion ${targetSdkVersion ?? 30}";
-    lines[compileSdkVersionMap.key] =
-        "    compileSdkVersion ${compileSdkVersion ?? 33}";
+    // Replace minSdkVersion
+    if (minSdkVersion != null) {
+      content = content.replaceAll(
+        RegExp(r'minSdkVersion \d+'),
+        'minSdkVersion $minSdkVersion',
+      );
+    }
 
-    buildFile.writeAsStringSync(lines.values.join("\n"));
+    // Replace targetSdkVersion
+    if (targetSdkVersion != null) {
+      content = content.replaceAll(
+        RegExp(r'targetSdkVersion \d+'),
+        'targetSdkVersion $targetSdkVersion',
+      );
+    }
+
+    // Replace compileSdkVersion
+    if (compileSdkVersion != null) {
+      content = content.replaceAll(
+        RegExp(r'compileSdkVersion \d+'),
+        'compileSdkVersion $compileSdkVersion',
+      );
+    }
+
+    await buildFile.writeAsString(content);
   }
 }

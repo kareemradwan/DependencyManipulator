@@ -6,17 +6,17 @@ class ManifestNode {
   final String uuid = "${DateTime.now().microsecondsSinceEpoch}";
   final String title;
   List<ManifestNode> _children;
-  List<ManifestProp> _props;
+  Set<ManifestProp> props;
 
   ManifestNode? _parent;
 
-  ManifestNode(this.title, this._children, this._props);
+  ManifestNode(this.title, this._children, this.props);
 
   static ManifestNode parse(XmlElement element) {
     List<ManifestNode> children = [];
-    List<ManifestProp> props = [];
+    Set<ManifestProp> mProps = {};
 
-    var node = ManifestNode(element.qualifiedName, children, props);
+    var node = ManifestNode(element.qualifiedName, children, mProps);
     for (var element in element.childElements) {
       ManifestNode child = ManifestNode.parse(element);
       child._parent = node;
@@ -25,7 +25,7 @@ class ManifestNode {
 
     for (var element in element.attributes) {
       ManifestProp prop = ManifestProp.parse(element);
-      props.add(prop);
+      mProps.add(prop);
     }
 
     return node;
@@ -36,6 +36,9 @@ class ManifestNode {
   }
 
   List<ManifestNode> filterBy(ManifestNode node) {
+    if (_parent != null && node.title == _parent?.title) {
+      return [_parent!];
+    }
     var lst = _children.where((element) => element.uuid == node.uuid).toList();
     for (var item in _children) {
       lst.addAll(item.filterBy(node));
@@ -44,6 +47,9 @@ class ManifestNode {
   }
 
   List<ManifestNode> filterByName(String name, {String? parentName}) {
+    if (_parent != null && name == _parent?.title) {
+      return [_parent!];
+    }
     var lst = _children
         .where((element) =>
             element.title == name &&
@@ -65,7 +71,7 @@ class ManifestNode {
 
   static XmlElement toXml(ManifestNode node) {
     List<XmlAttribute> attrs =
-        node._props.map((e) => ManifestProp.toXml(e)).toList();
+        node.props.map((e) => ManifestProp.toXml(e)).toList();
     List<XmlElement> children =
         node._children.map((e) => ManifestNode.toXml(e)).toList();
 
@@ -75,11 +81,12 @@ class ManifestNode {
 
   void update(ManifestNode node) {
     _children = node._children;
-    _props = node._props;
+    props = node.props;
+    print('props $props');
   }
 
   @override
   String toString() {
-    return 'ManifestNode{title: $title, childs: $_children, props: $_props}';
+    return 'ManifestNode{title: $title, childs: $_children, props: $props}';
   }
 }

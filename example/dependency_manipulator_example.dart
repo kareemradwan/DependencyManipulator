@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dependency_manipulator/platforms/android/android.dart';
-import 'package:dependency_manipulator/platforms/flutter/flutter.dart';
 
 Future<void> main() async {
   var androidPath = '/Users/salahamassi/Public/flutter_bond/android';
@@ -26,23 +25,30 @@ Future<void> main() async {
   // await androidManager
   //     .addLibrary(BomAndroidLibrary("com.gsm.services", "1234"));
 
-  final manifest = await androidManager.getManifest();
-  final manifestParentNode = manifest.filterByName('manifest').first;
-  final newProps = manifestParentNode.props
-    ..remove(
-      manifestParentNode.props.firstWhere(
-        (element) => element.key == 'package',
-      ),
-    )
-    ..add(
-      ManifestProp(
-        'package',
-        'ps.app.salah',
-      ),
-    );
-  manifestParentNode.props = newProps;
+  final types = ['main', 'debug', 'profile'];
 
-  androidManager.updateManifestNode(manifestParentNode);
+  for (final type in types) {
+    final manifest = androidManager.getManifest(type);
+    final manifestParentNode = manifest.filterByName('manifest').first;
+    final newProps = manifestParentNode.props
+      ..remove(
+        manifestParentNode.props.firstWhere(
+          (element) => element.key == 'package',
+        ),
+      )
+      ..add(
+        ManifestProp(
+          'package',
+          'ps.app.salah',
+        ),
+      );
+    manifestParentNode.props = newProps;
+
+    androidManager.updateManifestNode(
+      type,
+      manifestParentNode,
+    );
+  }
   print('build android app ...');
 
   // bool success = await androidManager.build();

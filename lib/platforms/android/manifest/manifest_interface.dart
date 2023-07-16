@@ -2,15 +2,34 @@ import 'android_manifest.dart';
 import 'manifest_node.dart';
 
 abstract class ManifestInterface {
-  Future<AndroidManifest> getManifest();
+  Set<AndroidManifest> getManifests();
 
-  Future<void> addManifestNodeToRoot(ManifestNode node);
+  AndroidManifest getManifest(String manifestFileType);
 
-  Future<void> addManifestNodeToParent(ManifestNode parent, ManifestNode node);
+  Future<void> addManifestNodeToRoot(
+    String manifestFileType,
+    ManifestNode node,
+  );
 
-  Future<void> updateManifestNode(ManifestNode node);
+  Future<void> addManifestNodeToParent(
+    String manifestFileType,
+    ManifestNode parent,
+    ManifestNode node,
+  );
 
-  Future<void> removeManifestNode(ManifestNode node);
+  Future<void> updateManifestNode(
+    String manifestFileType,
+    ManifestNode node,
+  );
 
-  Future<List<ManifestNode>> filterBy(String name, {String? parentName});
+  Future<void> removeManifestNode(
+    String manifestFileType,
+    ManifestNode node,
+  );
+
+  List<ManifestNode> filterBy(
+    String manifestFileType,
+    String name, {
+    String? parentName,
+  });
 }

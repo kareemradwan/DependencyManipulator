@@ -6,64 +6,112 @@ import 'manifest_node.dart';
 import 'package:xml/xml.dart';
 
 class ManifestManager implements ManifestInterface {
-  File manifestFile;
-  late AndroidManifest _manifest;
+  final Map<String, File> manifestFiles;
+  final Map<String, AndroidManifest> _manifest = {};
 
-  ManifestManager(this.manifestFile) {
-    final document = XmlDocument.parse(manifestFile.readAsStringSync());
-    XmlElement? applicationElement = document.getElement("manifest");
-    if (applicationElement == null) {
-      throw Exception("Invalid manifest file");
+  ManifestManager(this.manifestFiles) {
+    for (final manifestFileEntry in manifestFiles.entries) {
+      final manifestFile = manifestFileEntry.value;
+      final document = XmlDocument.parse(manifestFile.readAsStringSync());
+      XmlElement? applicationElement = document.getElement("manifest");
+      if (applicationElement == null) {
+        throw Exception("Invalid manifest file");
+      }
+      final application = ManifestNode.parse(applicationElement);
+      final model = AndroidManifest(application);
+      _manifest[manifestFileEntry.key] = model;
     }
-    ManifestNode application = ManifestNode.parse(applicationElement);
-    AndroidManifest model = AndroidManifest(application);
-    _manifest = model;
   }
 
   @override
-  Future<AndroidManifest> getManifest() async {
-    return _manifest;
+  Set<AndroidManifest> getManifests() {
+    return _manifest.values.toSet();
   }
 
   @override
-  Future<void> removeManifestNode(ManifestNode node) async {
-    var manifest = await getManifest();
+  AndroidManifest getManifest(String manifestFileType) {
+    if (!_manifest.containsKey(manifestFileType)) {
+      throw Exception(
+        "Manifest file for type $manifestFileType not found",
+      );
+    }
+    return _manifest[manifestFileType]!;
+  }
+
+  @override
+  Future<void> removeManifestNode(
+    String manifestFileType,
+    ManifestNode node,
+  ) async {
+    var manifest = getManifest(manifestFileType);
     manifest.remove(node);
-    manifestFile.writeAsStringSync(manifest.toXml());
+    if (!manifestFiles.containsKey(manifestFileType)) {
+      throw Exception(
+        "Manifest file for type $manifestFileType not found",
+      );
+    }
+    manifestFiles[manifestFileType]!.writeAsStringSync(manifest.toXml());
   }
 
   @override
   Future<void> addManifestNodeToParent(
-      ManifestNode parent, ManifestNode node) async {
-    var manifest = await getManifest();
+    String manifestFileType,
+    ManifestNode parent,
+    ManifestNode node,
+  ) async {
+    var manifest = getManifest(manifestFileType);
     // parent.add(node);
     var result = manifest.filterBy(parent)[0];
     result.add(node);
-    manifestFile.writeAsStringSync(manifest.toXml());
+    if (!manifestFiles.containsKey(manifestFileType)) {
+      throw Exception(
+        "Manifest file for type $manifestFileType not found",
+      );
+    }
+    manifestFiles[manifestFileType]!.writeAsStringSync(manifest.toXml());
   }
 
   @override
-  Future<void> addManifestNodeToRoot(ManifestNode node) async {
-    var manifest = await getManifest();
+  Future<void> addManifestNodeToRoot(
+    String manifestFileType,
+    ManifestNode node,
+  ) async {
+    var manifest = getManifest(manifestFileType);
     manifest.add(node);
-    manifestFile.writeAsStringSync(manifest.toXml());
+    if (!manifestFiles.containsKey(manifestFileType)) {
+      throw Exception(
+        "Manifest file for type $manifestFileType not found",
+      );
+    }
+    manifestFiles[manifestFileType]!.writeAsStringSync(manifest.toXml());
   }
 
   @override
-  Future<void> updateManifestNode(ManifestNode node) async {
-    var manifest = await getManifest();
+  Future<void> updateManifestNode(
+    String manifestFileType,
+    ManifestNode node,
+  ) async {
+    var manifest = getManifest(manifestFileType);
     var result = manifest.filterBy(node);
-
     if (result.length == 1) {
       ManifestNode preNode = result[0];
       preNode.update(node);
-      manifestFile.writeAsStringSync(manifest.toXml());
+      if (!manifestFiles.containsKey(manifestFileType)) {
+        throw Exception(
+          "Manifest file for type $manifestFileType not found",
+        );
+      }
+      manifestFiles[manifestFileType]!.writeAsStringSync(manifest.toXml());
     }
   }
 
   @override
-  Future<List<ManifestNode>> filterBy(String name, {String? parentName}) async {
-    var manifest = await getManifest();
+  List<ManifestNode> filterBy(
+    String manifestFileType,
+    String name, {
+    String? parentName,
+  }) {
+    var manifest = getManifest(manifestFileType);
     return manifest.filterByName(name, parentName: parentName);
   }
 }

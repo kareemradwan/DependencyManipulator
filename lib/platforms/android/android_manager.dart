@@ -39,13 +39,25 @@ class AndroidManager
     }
     _libraryManager = AndroidLibraryManager(libraryBuildFile);
 
-    var manifestFile =
+    final mainManifestFile =
         File("${_android.path}/app/src/main/AndroidManifest.xml");
-    if (!manifestFile.existsSync()) {
-      throw ArgumentError(
-          "file AndroidManifest.xml is missing inside /app/src/main/ folder");
+    final debugManifestFile =
+        File("${_android.path}/app/src/debug/AndroidManifest.xml");
+    final profileManifestFile =
+        File("${_android.path}/app/src/profile/AndroidManifest.xml");
+
+    final manifestFiles = {
+      "main": mainManifestFile,
+      "debug": debugManifestFile,
+      "profile": profileManifestFile,
+    };
+    for (final manifestFileEntry in manifestFiles.entries) {
+      if (!manifestFileEntry.value.existsSync()) {
+        throw ArgumentError(
+            "file ${manifestFileEntry.value.path} is missing inside android/app/src/${manifestFileEntry.key}/ folder");
+      }
     }
-    _manifestManager = ManifestManager(manifestFile);
+    _manifestManager = ManifestManager(manifestFiles);
 
     _buildManager = AndroidBuildManager(_android);
   }
@@ -111,34 +123,72 @@ class AndroidManager
   }
 
   @override
-  Future<AndroidManifest> getManifest() async {
-    return await _manifestManager.getManifest();
+  Set<AndroidManifest> getManifests() {
+    return _manifestManager.getManifests();
   }
 
   @override
-  Future<void> removeManifestNode(ManifestNode node) async {
-    return await _manifestManager.removeManifestNode(node);
+  AndroidManifest getManifest(String manifestFileType) {
+    return _manifestManager.getManifest(manifestFileType);
+  }
+
+  @override
+  Future<void> removeManifestNode(
+    String manifestFileType,
+    ManifestNode node,
+  ) async {
+    return await _manifestManager.removeManifestNode(
+      manifestFileType,
+      node,
+    );
   }
 
   @override
   Future<void> addManifestNodeToParent(
-      ManifestNode parent, ManifestNode node) async {
-    return await _manifestManager.addManifestNodeToParent(parent, node);
+    String manifestFileType,
+    ManifestNode parent,
+    ManifestNode node,
+  ) async {
+    return await _manifestManager.addManifestNodeToParent(
+      manifestFileType,
+      parent,
+      node,
+    );
   }
 
   @override
-  Future<void> addManifestNodeToRoot(ManifestNode node) async {
-    return await _manifestManager.addManifestNodeToRoot(node);
+  Future<void> addManifestNodeToRoot(
+    String manifestFileType,
+    ManifestNode node,
+  ) async {
+    return await _manifestManager.addManifestNodeToRoot(
+      manifestFileType,
+      node,
+    );
   }
 
   @override
-  Future<void> updateManifestNode(ManifestNode node) async {
-    return await _manifestManager.updateManifestNode(node);
+  Future<void> updateManifestNode(
+    String manifestFileType,
+    ManifestNode node,
+  ) async {
+    return await _manifestManager.updateManifestNode(
+      manifestFileType,
+      node,
+    );
   }
 
   @override
-  Future<List<ManifestNode>> filterBy(String name, {String? parentName}) async {
-    return await _manifestManager.filterBy(name, parentName: parentName);
+  List<ManifestNode> filterBy(
+    String manifestFileType,
+    String name, {
+    String? parentName,
+  }) {
+    return _manifestManager.filterBy(
+      manifestFileType,
+      name,
+      parentName: parentName,
+    );
   }
 
   @override

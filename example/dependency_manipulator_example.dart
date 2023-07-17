@@ -10,6 +10,7 @@ Future<void> main() async {
   var androidManager = AndroidManager(androidDirectory);
 
   await androidManager.prepareEnv(
+    appName: 'salah',
     applicationId: 'com.app.ps',
     minSdkVersion: '32',
     targetSdkVersion: '32',

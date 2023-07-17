@@ -207,12 +207,15 @@ class AndroidManager
   }
 
   @override
-  Future<void> prepareEnv(
-      {String? applicationId,
-      String? minSdkVersion,
-      String? targetSdkVersion,
-      String? compileSdkVersion}) async {
+  Future<void> prepareEnv({
+    String? appName,
+    String? applicationId,
+    String? minSdkVersion,
+    String? targetSdkVersion,
+    String? compileSdkVersion,
+  }) async {
     return await _buildManager.prepareEnv(
+        appName: appName,
         applicationId: applicationId,
         minSdkVersion: minSdkVersion,
         targetSdkVersion: targetSdkVersion,

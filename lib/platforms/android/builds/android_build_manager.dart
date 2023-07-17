@@ -20,9 +20,9 @@ class AndroidBuildManager implements AndroidBuildInterface {
     return result.exitCode == 0;
   }
 
-
   @override
   Future<void> prepareEnv({
+    String? appName,
     String? applicationId,
     String? minSdkVersion,
     String? targetSdkVersion,
@@ -36,6 +36,22 @@ class AndroidBuildManager implements AndroidBuildInterface {
 
     var content = await buildFile.readAsString();
 
+    // Replace appName
+    if (appName != null) {
+      final matches =
+          RegExp(r'resValue "string", "app_name", "[^"]+"').allMatches(content);
+      if (matches.isEmpty) {
+        throw Exception(
+            'Error: resValue "string", "app_name", not found in build.gradle file');
+      }
+      for (var match in matches) {
+        content = content.replaceRange(
+          match.start,
+          match.end,
+          'resValue "string", "app_name","$appName"',
+        );
+      }
+    }
     // Replace applicationId
     if (applicationId != null) {
       var match = RegExp(r'applicationId "[^"]+"').firstMatch(content);

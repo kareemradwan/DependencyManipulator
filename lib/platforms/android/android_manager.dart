@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'builds/android_build_interface.dart';
 import 'builds/android_build_manager.dart';
+import 'files/android_file_manager.dart';
 import 'library/android_library.dart';
 import 'library/android_library_interface.dart';
 import 'library/android_library_manager.dart';
@@ -18,12 +19,14 @@ class AndroidManager
         AndroidPluginInterface,
         AndroidLibraryInterface,
         ManifestInterface,
-        AndroidBuildInterface {
+        AndroidBuildInterface,
+        AndroidFileManager {
   late final Directory _android;
   late final AndroidPluginInterface _pluginManager;
   late final AndroidLibraryInterface _libraryManager;
   late final ManifestInterface _manifestManager;
   late final AndroidBuildInterface _buildManager;
+  late final AndroidFileManager _androidFileManager;
 
   AndroidManager(this._android) {
     var pluginBuildFile = File("${_android.path}/build.gradle");
@@ -60,6 +63,8 @@ class AndroidManager
     _manifestManager = ManifestManager(manifestFiles);
 
     _buildManager = AndroidBuildManager(_android);
+
+    _androidFileManager = AndroidFileManager(_android);
   }
 
   @override
@@ -212,5 +217,23 @@ class AndroidManager
         minSdkVersion: minSdkVersion,
         targetSdkVersion: targetSdkVersion,
         compileSdkVersion: compileSdkVersion);
+  }
+
+  @override
+  Future<void> renameDirectory(String oldPath, String newPath) async {
+    return await _androidFileManager.renameDirectory(oldPath, newPath);
+  }
+
+  @override
+  Future<void> replaceFileContent(
+    String path,
+    String oldContent,
+    String newContent,
+  ) async {
+    return await _androidFileManager.replaceFileContent(
+      path,
+      oldContent,
+      newContent,
+    );
   }
 }

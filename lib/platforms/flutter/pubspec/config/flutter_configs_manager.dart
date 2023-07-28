@@ -54,23 +54,14 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
     if (!exists) {
       throw Exception('Project directory not found');
     }
-    final pubGetProcessResult = await Process.start('flutter', [
+    final pubGetProcessResult = await Process.run('flutter', [
       'pub',
       'get',
       '--directory',
       projectDir.path,
     ]);
-
-    // Connect the stdout of the process to the stdout of the Dart script.
-    // This will print the output of the process directly to the console,
-    // preserving any special formatting like colors or font styles.
-    pubGetProcessResult.stdout.transform(utf8.decoder).listen((data) {
-      stdout.write(data);
-    });
-
-    pubGetProcessResult.stderr.transform(utf8.decoder).listen((data) {
-      stderr.write(data);
-    });
+    stdout.write(pubGetProcessResult.stdout);
+    stderr.write(pubGetProcessResult.stderr);
   }
 
   @override
@@ -80,20 +71,12 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
     if (!exists) {
       throw Exception('lib directory not found');
     }
-    final formatProcessResult = await Process.start('dart', [
+    final formatProcessResult = await Process.run('dart', [
       'format',
       projectDir.path,
     ]);
 
-    // Connect the stdout of the process to the stdout of the Dart script.
-    // This will print the output of the process directly to the console,
-    // preserving any special formatting like colors or font styles.
-    formatProcessResult.stdout.transform(utf8.decoder).listen((data) {
-      stdout.write(data);
-    });
-
-    formatProcessResult.stderr.transform(utf8.decoder).listen((data) {
-      stderr.write(data);
-    });
+    stdout.write(formatProcessResult.stdout);
+    stderr.write(formatProcessResult.stderr);
   }
 }

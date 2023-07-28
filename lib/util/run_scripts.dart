@@ -2,12 +2,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-Future<List<String>> executeRubyScript(String scriptPath,
+Future<List<String>> executeRubyScript(String script,
     [List<String>? argument]) async {
   final List<String> result = [];
 
   // Prepare the argument list
-  List<String> arguments = ['lib/scripts/ruby/$scriptPath'];
+  List<String> arguments = ['-e', script];
   if (argument != null) {
     arguments.addAll(argument);
   }

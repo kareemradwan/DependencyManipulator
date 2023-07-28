@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dependency_manipulator/scripts/ruby/get_bundle_id.rb.dart';
+import 'package:dependency_manipulator/scripts/ruby/set_bundle_id.rb.dart';
 import 'package:dependency_manipulator/util/run_scripts.dart';
 import 'package:xml/xml.dart';
 
@@ -42,7 +44,7 @@ class BuildSettingsManager implements BuildSettingsInterface {
   @override
   Future<Map<String, dynamic>> getBundleId() async {
     final output = await executeRubyScript(
-      'get_bundle_id.rb',
+      getBundleIdScript,
       [_buildSettingsFile.path],
     );
     if (output.isEmpty) {
@@ -94,7 +96,7 @@ class BuildSettingsManager implements BuildSettingsInterface {
   @override
   Future<void> updateBundleId(String bundleId, String buildConfig) async {
     final output = await executeRubyScript(
-      'set_bundle_id.rb',
+      setBundleIdScript,
       [
         _buildSettingsFile.path,
         bundleId,

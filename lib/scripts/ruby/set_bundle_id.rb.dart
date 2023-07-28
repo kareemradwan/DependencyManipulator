@@ -1,4 +1,6 @@
-require 'xcodeproj'
+String get setBundleIdScript {
+  return '''
+  require 'xcodeproj'
 
 begin
   project_path = ARGV[0]
@@ -22,3 +24,6 @@ puts "Project Saved"
 rescue Exception => e
   puts "An error occurred: #{e.message}"
 end
+
+  ''';
+}

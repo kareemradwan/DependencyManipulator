@@ -3,16 +3,16 @@ require 'json'
 
 begin
   project_path = ARGV[0]
-  puts "Opening project at path: #{project_path}"
+#   puts "Opening project at path: #{project_path}"
 
   project = Xcodeproj::Project.open(project_path)
 
- puts "Successfully opened project"
+#   puts "Successfully opened project"
 
   bundle_ids = {}
   project.targets.each do |target|
     target.build_configurations.each do |config|
-      puts "#{config} => #{config.build_settings['PRODUCT_BUNDLE_IDENTIFIER']}"
+#       puts "#{config} => #{config.build_settings['PRODUCT_BUNDLE_IDENTIFIER']}"
       bundle_ids[config.name] = config.build_settings['PRODUCT_BUNDLE_IDENTIFIER']
     end
 

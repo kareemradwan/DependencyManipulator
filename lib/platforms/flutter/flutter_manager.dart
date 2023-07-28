@@ -9,13 +9,14 @@ import 'pubspec/dependency/flutter_dependency_manager.dart';
 
 class FlutterManager
     implements FlutterDependencyInterface, FlutterConfigsInterface {
-  final File _basePath;
+  final Directory _projectDirectory;
   late FlutterDependencyInterface _dependencyManager;
   late FlutterConfigsInterface _flutterConfigs;
 
-  FlutterManager(this._basePath) {
-    _dependencyManager = FlutterDependencyManager(_basePath);
-    _flutterConfigs = FlutterConfigsManager(_basePath);
+  FlutterManager(this._projectDirectory) {
+    final pubspecFile = File('${_projectDirectory.path}/pubspec.yaml');
+    _dependencyManager = FlutterDependencyManager(pubspecFile);
+    _flutterConfigs = FlutterConfigsManager(pubspecFile);
   }
 
   @override

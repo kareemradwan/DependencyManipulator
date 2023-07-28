@@ -7,7 +7,7 @@ Future<List<String>> executeRubyScript(String scriptPath,
   final List<String> result = [];
 
   // Prepare the argument list
-  List<String> arguments = ['scripts/ruby/$scriptPath'];
+  List<String> arguments = ['lib/scripts/ruby/$scriptPath'];
   if (argument != null) {
     arguments.addAll(argument);
   }

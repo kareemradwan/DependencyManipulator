@@ -82,7 +82,6 @@ class ManifestNode {
   void update(ManifestNode node) {
     _children = node._children;
     props = node.props;
-    print('props $props');
   }
 
   @override

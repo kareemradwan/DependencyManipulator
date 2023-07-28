@@ -38,7 +38,6 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
 
     for (final file in dartFiles) {
       var content = await File(file.path).readAsString();
-      print('file ${file.path}');
       content = content.replaceAll(
         "import 'package:$oldName/",
         "import 'package:$newName/",

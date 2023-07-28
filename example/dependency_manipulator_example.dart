@@ -55,16 +55,16 @@ Future<void> main() async {
 
   // var iosPath = '/Users/salahamassi/Public/flutter_bond/ios';
   //
-  // final buildSettingsManager = BuildSettingsManager(Directory(iosPath));
-  // print('buildSettingsManager: ${await buildSettingsManager.getAppName()}');
-  // final bundleId = await buildSettingsManager.getBundleId();
-  // print('buildSettingsManager: $bundleId');
+  // final iosManager = IosManager(Directory(iosPath));
+  // print('iosManager: ${await iosManager.getAppName()}');
+  // final bundleId = await iosManager.getBundleId();
+  // print('iosManager: $bundleId');
   //
   // for (final bundle in bundleId.entries) {
-  //   print('buildSettingsManager: ${bundle.key} ${bundle.value}');
-  //   await buildSettingsManager.setBundleId('sa.app.salah', bundle.key);
+  //   print('iosManager: ${bundle.key} ${bundle.value}');
+  //   await iosManager.updateBundleId('sa.app.salah', bundle.key);
   // }
-  // await buildSettingsManager.setAppName('Salah');
+  // await iosManager.updateAppName('Salah');
 
   // bool success = await androidManager.build();
   // print('success: $success');

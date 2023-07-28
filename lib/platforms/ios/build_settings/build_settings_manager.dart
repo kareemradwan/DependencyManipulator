@@ -53,7 +53,7 @@ class BuildSettingsManager implements BuildSettingsInterface {
   }
 
   @override
-  Future<void> setAppName(String appName) async {
+  Future<void> updateAppName(String appName) async {
     // Check if file exists
     if (!_infoPlist.existsSync()) {
       throw Exception('Info.plist file not found at ${_infoPlist.path}');
@@ -92,7 +92,7 @@ class BuildSettingsManager implements BuildSettingsInterface {
   }
 
   @override
-  Future<void> setBundleId(String bundleId, String buildConfig) async {
+  Future<void> updateBundleId(String bundleId, String buildConfig) async {
     final output = await executeRubyScript(
       'set_bundle_id.rb',
       [

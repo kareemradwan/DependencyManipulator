@@ -3,11 +3,11 @@ abstract class BuildSettingsInterface {
   Future<Map<String, dynamic>> getBundleId();
 
   /// Method to update the Bundle ID for the given build config
-  Future<void> setBundleId(String bundleId, String buildConfig);
+  Future<void> updateBundleId(String bundleId, String buildConfig);
 
   /// Method to get the current app name (product name)
   Future<String> getAppName();
 
   /// Method to update the app name (product name)
-  Future<void> setAppName(String appName);
+  Future<void> updateAppName(String appName);
 }

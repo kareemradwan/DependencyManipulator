@@ -54,19 +54,13 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
     if (!exists) {
       throw Exception('Project directory not found');
     }
-    final pubGetProcess = await Process.start('flutter', [
+    final pubGetProcessResult = await Process.run('flutter', [
       'pub',
       'get',
       projectDir.path,
     ]);
-    final pubGetOutput = pubGetProcess.stdout.transform(Utf8Decoder());
-
-    // Listen for the output
-    await for (var data in pubGetOutput) {
-      print(data);
-    }
-
-    await pubGetProcess.exitCode;
+    stdout.write(pubGetProcessResult.stdout);
+    stderr.write(pubGetProcessResult.stderr);
   }
 
   @override

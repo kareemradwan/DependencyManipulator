@@ -70,18 +70,12 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
     if (!exists) {
       throw Exception('lib directory not found');
     }
-    final formatProcess = await Process.start('dart', [
+    final formatProcessResult = await Process.run('dart', [
       'format',
       projectDir.path,
     ]);
 
-    final formatOutput = formatProcess.stdout.transform(Utf8Decoder());
-
-    // Listen for the output
-    await for (var data in formatOutput) {
-      print(data);
-    }
-
-    await formatProcess.exitCode;
+    stdout.write(formatProcessResult.stdout);
+    stderr.write(formatProcessResult.stderr);
   }
 }

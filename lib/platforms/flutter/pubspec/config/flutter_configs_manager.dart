@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dependency_manipulator/platforms/flutter/pubspec/config/flutter_configs_interfaces.dart';
@@ -51,17 +50,7 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
   Future<void> pubGet() async {
     final projectDir = Directory(_pubspecFile.parent.path);
     await Process.run('cd', [projectDir.path]);
-    final process = await Process.run('flutter', ['pub', 'get']);
-    // Transform stdout's Stream<List<int>> to Stream<String>
-    final output = process.stdout.transform(Utf8Decoder());
-
-    // Listen for the output
-    await for (var data in output) {
-      print(data);
-    }
-
-    // Wait for the process to be finished
-    await process.exitCode;
+    await Process.run('flutter', ['pub', 'get']);
   }
 
   @override

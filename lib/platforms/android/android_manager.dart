@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'builds/android_build_interface.dart';
 import 'builds/android_build_manager.dart';
+import 'files/android_file_interface.dart';
 import 'files/android_file_manager.dart';
 import 'library/android_library.dart';
 import 'library/android_library_interface.dart';
@@ -20,13 +21,13 @@ class AndroidManager
         AndroidLibraryInterface,
         ManifestInterface,
         AndroidBuildInterface,
-        AndroidFileManager {
+        AndroidFileInterface {
   late final Directory _android;
   late final AndroidPluginInterface _pluginManager;
   late final AndroidLibraryInterface _libraryManager;
   late final ManifestInterface _manifestManager;
   late final AndroidBuildInterface _buildManager;
-  late final AndroidFileManager _androidFileManager;
+  late final AndroidFileInterface _androidFileManager;
 
   AndroidManager(this._android) {
     var pluginBuildFile = File("${_android.path}/build.gradle");

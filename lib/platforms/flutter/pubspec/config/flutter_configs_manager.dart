@@ -48,6 +48,8 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
 
   @override
   Future<void> pubGet() async {
+    final projectDir = Directory(_pubspecFile.parent.path);
+    await Process.run('cd', [projectDir.path]);
     await Process.run('flutter', ['pub', 'get']);
   }
 

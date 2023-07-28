@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:dependency_manipulator/platforms/android/android.dart';
-import 'package:dependency_manipulator/platforms/ios/build_settings/build_settings_manager.dart';
+import 'package:dependency_manipulator/platforms/flutter/flutter_manager.dart';
 
 Future<void> main() async {
   //var androidPath = '/Users/salahamassi/Public/flutter_bond/android';
@@ -43,35 +42,39 @@ Future<void> main() async {
   //   );
   // }
   //
-  // final oldPath = '/app/src/main/kotlin/ps/app/bond';
-  // final newPath = '/app/src/main/kotlin/ps/app/salah';
-  // await androidManager.renameDirectory(oldPath, newPath);
-  // final appClassPath = '/$newPath/MainActivity.kt';
-  // await androidManager.replaceFileContent(
-  //   appClassPath,
-  //   'package ps.app.bond',
-  //   'package ps.app.salah',
-  // );
-//  print('build android app ...');
+ //  final oldPath = '/app/src/main/kotlin/ps/app/bond';
+ //  final newPath = '/app/src/main/kotlin/ps/app/salah';
+ //  await androidManager.renameDirectory(oldPath, newPath);
+ //  final appClassPath = '/$newPath/MainActivity.kt';
+ //  await androidManager.replaceFileContent(
+ //    appClassPath,
+ //    'package ps.app.bond',
+ //    'package ps.app.salah',
+ //  );
+ // print('build android app ...');
 
-  var iosPath = '/Users/salahamassi/Public/flutter_bond/ios';
-
-  final buildSettingsManager = BuildSettingsManager(Directory(iosPath));
-  print('buildSettingsManager: ${await buildSettingsManager.getAppName()}');
-  final bundleId = await buildSettingsManager.getBundleId();
-  print('buildSettingsManager: $bundleId');
-
-  for (final bundle in bundleId.entries) {
-    print('buildSettingsManager: ${bundle.key} ${bundle.value}');
-    await buildSettingsManager.setBundleId('sa.app.salah', bundle.key);
-  }
-  await buildSettingsManager.setAppName('Salah');
+  // var iosPath = '/Users/salahamassi/Public/flutter_bond/ios';
+  //
+  // final buildSettingsManager = BuildSettingsManager(Directory(iosPath));
+  // print('buildSettingsManager: ${await buildSettingsManager.getAppName()}');
+  // final bundleId = await buildSettingsManager.getBundleId();
+  // print('buildSettingsManager: $bundleId');
+  //
+  // for (final bundle in bundleId.entries) {
+  //   print('buildSettingsManager: ${bundle.key} ${bundle.value}');
+  //   await buildSettingsManager.setBundleId('sa.app.salah', bundle.key);
+  // }
+  // await buildSettingsManager.setAppName('Salah');
 
   // bool success = await androidManager.build();
   // print('success: $success');
   //
-  // var pubspecFile = File('./pubspec.yaml');
-  // var flutterManager = FlutterManager(pubspecFile);
+  final flutterPath = '/Users/salahamassi/Public/flutter_bond';
+  final pubspecFile = File('$flutterPath/pubspec.yaml');
+  final flutterManager = FlutterManager(pubspecFile);
+  await flutterManager.updateName('salah');
+  await flutterManager.format();
+  await flutterManager.pubGet();
   // await flutterManager.addDependency(FlutterDependency("lints", "^2.0.0"));
   // var flutterDependencies = await flutterManager.listDependencies(name: "args");
   // for (var depedency in flutterDependencies) {

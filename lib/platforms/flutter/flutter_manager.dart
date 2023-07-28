@@ -1,15 +1,21 @@
 import 'dart:io';
 
+import 'package:dependency_manipulator/platforms/flutter/pubspec/config/flutter_configs_interfaces.dart';
+import 'package:dependency_manipulator/platforms/flutter/pubspec/config/flutter_configs_manager.dart';
+
 import 'pubspec/dependency/flutter_dependency.dart';
 import 'pubspec/dependency/flutter_dependency_interface.dart';
 import 'pubspec/dependency/flutter_dependency_manager.dart';
 
-class FlutterManager implements FlutterDependencyInterface {
+class FlutterManager
+    implements FlutterDependencyInterface, FlutterConfigsInterface {
   final File _basePath;
-  late FlutterDependencyManager _dependencyManager;
+  late FlutterDependencyInterface _dependencyManager;
+  late FlutterConfigsInterface _flutterConfigs;
 
   FlutterManager(this._basePath) {
     _dependencyManager = FlutterDependencyManager(_basePath);
+    _flutterConfigs = FlutterConfigsManager(_basePath);
   }
 
   @override
@@ -35,8 +41,17 @@ class FlutterManager implements FlutterDependencyInterface {
   }
 
   @override
+  Future<void> format() async {
+    await _flutterConfigs.format();
+  }
+
+  @override
   Future<void> pubGet() async {
-    // TODO: implement pubGet
-    return await _dependencyManager.pubGet();
+    await _flutterConfigs.pubGet();
+  }
+
+  @override
+  Future<void> updateName(String name) async {
+    await _flutterConfigs.updateName(name);
   }
 }

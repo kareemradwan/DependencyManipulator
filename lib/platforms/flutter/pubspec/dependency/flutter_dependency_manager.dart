@@ -80,9 +80,4 @@ class FlutterDependencyManager implements FlutterDependencyInterface {
   Future<void> _flush() async {
     _pubspecFile.writeAsStringSync(_editor.toString());
   }
-
-  @override
-  Future<void> pubGet() async {
-    await Process.run("flutter", ["pub", "get"]);
-  }
 }

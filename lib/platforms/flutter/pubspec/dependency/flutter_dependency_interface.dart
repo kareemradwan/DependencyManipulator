@@ -9,6 +9,4 @@ abstract class FlutterDependencyInterface {
   Future<void> update(FlutterDependency dependency);
 
   Future<void> remove(FlutterDependency dependency);
-
-  Future<void> pubGet();
 }

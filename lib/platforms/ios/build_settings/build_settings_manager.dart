@@ -106,6 +106,5 @@ class BuildSettingsManager implements BuildSettingsInterface {
     if (output.isEmpty) {
       throw Exception('Failed to set bundle ID');
     }
-    print('output: ${output.join()}');
   }
 }

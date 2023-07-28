@@ -48,12 +48,16 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
 
   @override
   Future<void> pubGet() async {
-    await Process.run("flutter", ["pub", "get"]);
+    await Process.run('flutter', ['pub', 'get']);
   }
 
   @override
   Future<void> format() async {
     final projectDir = Directory('${_pubspecFile.parent.path}/lib');
-    await Process.run("flutter", ["format",(projectDir.path)]);
+    final exists = await projectDir.exists();
+    if (!exists) {
+      throw Exception('lib directory not found');
+    }
+    await Process.run('dart', ['format', projectDir.path]);
   }
 }

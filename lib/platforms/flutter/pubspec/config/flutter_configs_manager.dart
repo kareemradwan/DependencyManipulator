@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dependency_manipulator/platforms/flutter/pubspec/config/flutter_configs_interfaces.dart';
@@ -49,8 +50,23 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
   @override
   Future<void> pubGet() async {
     final projectDir = Directory(_pubspecFile.parent.path);
-    await Process.run('cd', [projectDir.path]);
-    await Process.run('flutter', ['pub', 'get']);
+    final exists = await projectDir.exists();
+    if (!exists) {
+      throw Exception('Project directory not found');
+    }
+    final pubGetProcess = await Process.start('flutter', [
+      'pub',
+      'get',
+      projectDir.path,
+    ]);
+    final pubGetOutput = pubGetProcess.stdout.transform(Utf8Decoder());
+
+    // Listen for the output
+    await for (var data in pubGetOutput) {
+      print(data);
+    }
+
+    await pubGetProcess.exitCode;
   }
 
   @override
@@ -60,6 +76,18 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
     if (!exists) {
       throw Exception('lib directory not found');
     }
-    await Process.run('dart', ['format', projectDir.path]);
+    final formatProcess = await Process.start('dart', [
+      'format',
+      projectDir.path,
+    ]);
+
+    final formatOutput = formatProcess.stdout.transform(Utf8Decoder());
+
+    // Listen for the output
+    await for (var data in formatOutput) {
+      print(data);
+    }
+
+    await formatProcess.exitCode;
   }
 }

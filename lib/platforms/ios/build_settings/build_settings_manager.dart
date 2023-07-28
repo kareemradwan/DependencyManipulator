@@ -73,7 +73,7 @@ class BuildSettingsManager implements BuildSettingsInterface {
     }
 
     // Set the new app name
-    appNameElement.innerText = appName.toLowerCase();
+    appNameElement.innerText = appName.toLowerCase().replaceAll(' ', '_');
 
     final appDisplayNameElement = document
         .findAllElements('key')

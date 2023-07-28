@@ -57,6 +57,7 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
     final pubGetProcessResult = await Process.run('flutter', [
       'pub',
       'get',
+      '--directory',
       projectDir.path,
     ]);
     stdout.write(pubGetProcessResult.stdout);

@@ -43,6 +43,10 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
         "import 'package:$oldName/",
         "import 'package:$newName/",
       );
+      content = content.replaceAll(
+        "export 'package:$oldName/",
+        "export 'package:$newName/",
+      );
       await File(file.path).writeAsString(content);
     }
   }

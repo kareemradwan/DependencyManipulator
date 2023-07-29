@@ -1,6 +1,6 @@
 name: native_project_manipulator
 description: Manipulate you Dependencies as a Game.
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/kareemradwan/DependencyManipulator
 
 environment:

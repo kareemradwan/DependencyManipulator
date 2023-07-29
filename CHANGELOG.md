@@ -1,3 +1,7 @@
+## 0.0.8
+- Get minSdkVersion, targetSdkVersion, compileSdkVersion values from end user.
+
+
 ## 0.0.7
 - Get minSdkVersion, targetSdkVersion, compileSdkVersion values from end user.
 

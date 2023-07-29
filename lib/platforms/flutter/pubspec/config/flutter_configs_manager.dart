@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dependency_manipulator/platforms/flutter/pubspec/config/flutter_configs_interfaces.dart';
@@ -6,9 +5,10 @@ import 'package:yaml_edit/yaml_edit.dart';
 
 class FlutterConfigsManager implements FlutterConfigsInterface {
   final File _pubspecFile;
+  final bool _printToConsole;
   late YamlEditor _editor;
 
-  FlutterConfigsManager(this._pubspecFile) {
+  FlutterConfigsManager(this._pubspecFile, this._printToConsole) {
     _editor = YamlEditor(_pubspecFile.readAsStringSync());
   }
 
@@ -60,7 +60,9 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
       '--directory',
       projectDir.path,
     ]);
-    stdout.write(pubGetProcessResult.stdout);
+    if (_printToConsole) {
+      stdout.write(pubGetProcessResult.stdout);
+    }
     stderr.write(pubGetProcessResult.stderr);
   }
 
@@ -76,7 +78,9 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
       projectDir.path,
     ]);
 
-    stdout.write(formatProcessResult.stdout);
+    if (_printToConsole) {
+      stdout.write(formatProcessResult.stdout);
+    }
     stderr.write(formatProcessResult.stderr);
   }
 }

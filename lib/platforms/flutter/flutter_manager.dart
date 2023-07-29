@@ -13,10 +13,10 @@ class FlutterManager
   late FlutterDependencyInterface _dependencyManager;
   late FlutterConfigsInterface _flutterConfigs;
 
-  FlutterManager(this._projectDirectory) {
+  FlutterManager(this._projectDirectory, {bool printToConsole = true}) {
     final pubspecFile = File('${_projectDirectory.path}/pubspec.yaml');
     _dependencyManager = FlutterDependencyManager(pubspecFile);
-    _flutterConfigs = FlutterConfigsManager(pubspecFile);
+    _flutterConfigs = FlutterConfigsManager(pubspecFile, printToConsole);
   }
 
   @override

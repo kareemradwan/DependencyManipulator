@@ -1,3 +1,10 @@
+## 0.0.7
+- Get minSdkVersion, targetSdkVersion, compileSdkVersion values from end user.
+
+
+## 0.0.6
+- Get minSdkVersion, targetSdkVersion, compileSdkVersion values from end user.
+
 ## 0.0.5
 - Update README file
 

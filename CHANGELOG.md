@@ -1,9 +1,8 @@
 ## 0.0.8
-- Get minSdkVersion, targetSdkVersion, compileSdkVersion values from end user.
-
+- Support iOS Platform
 
 ## 0.0.7
-- Get minSdkVersion, targetSdkVersion, compileSdkVersion values from end user.
+- rename project name 
 
 
 ## 0.0.6

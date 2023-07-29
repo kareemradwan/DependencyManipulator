@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dependency_manipulator/platforms/flutter/flutter_manager.dart';
-import 'package:dependency_manipulator/platforms/ios/ios_manager.dart';
+import 'package:native_project_manipulator/platforms/flutter/flutter_manager.dart';
+import 'package:native_project_manipulator/platforms/ios/ios_manager.dart';
 
 Future<void> main() async {
   //var androidPath = '/Users/salahamassi/Public/flutter_bond/android';

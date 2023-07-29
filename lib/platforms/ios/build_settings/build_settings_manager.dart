@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dependency_manipulator/scripts/ruby/get_bundle_id.rb.dart';
-import 'package:dependency_manipulator/scripts/ruby/set_bundle_id.rb.dart';
-import 'package:dependency_manipulator/util/run_scripts.dart';
+import 'package:native_project_manipulator/scripts/ruby/get_bundle_id.rb.dart';
+import 'package:native_project_manipulator/scripts/ruby/set_bundle_id.rb.dart';
+import 'package:native_project_manipulator/util/run_scripts.dart';
 import 'package:xml/xml.dart';
 
 import 'build_settings_interface.dart';

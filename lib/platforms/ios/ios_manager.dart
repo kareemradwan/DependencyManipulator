@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:dependency_manipulator/platforms/ios/build_settings/build_settings_manager.dart';
 
 import 'build_settings/build_settings_interface.dart';
+import 'build_settings/build_settings_manager.dart';
 
 class IosManager implements BuildSettingsInterface {
   final Directory iosDirectory;

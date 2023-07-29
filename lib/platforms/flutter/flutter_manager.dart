@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dependency_manipulator/platforms/flutter/pubspec/config/flutter_configs_interfaces.dart';
-import 'package:dependency_manipulator/platforms/flutter/pubspec/config/flutter_configs_manager.dart';
+import 'package:native_project_manipulator/platforms/flutter/pubspec/config/flutter_configs_manager.dart';
+import 'package:native_project_manipulator/platforms/flutter/pubspec/config/flutter_configs_interfaces.dart';
 
 import 'pubspec/dependency/flutter_dependency.dart';
 import 'pubspec/dependency/flutter_dependency_interface.dart';

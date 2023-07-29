@@ -9,12 +9,27 @@ class AndroidFileManager implements AndroidFileInterface {
 
   @override
   Future<void> renameDirectory(String oldPath, String newPath) async {
-    final directory = Directory(_android.path + oldPath);
-    final exists = await directory.exists();
-    if (!exists) {
-      throw ArgumentError("oldPath $directory doesn't exist");
+    final oldParts = oldPath.split('/');
+    final newParts = newPath.split('/');
+
+    if (oldParts.length != newParts.length) {
+      throw ArgumentError('The old and new paths must have the same structure');
     }
-    await directory.rename(_android.path + newPath);
+
+    for (var i = 0; i < oldParts.length; i++) {
+      final oldDirectory =
+          Directory(_android.path + oldParts.sublist(0, i + 1).join('/'));
+      final newDirectoryPath =
+          '${_android.path}${oldParts.sublist(0, i).join('/')}/${newParts[i]}';
+
+      if (!(await oldDirectory.exists())) {
+        throw FileSystemException(
+            "Source directory does not exist!", oldDirectory.path);
+      }
+
+      await oldDirectory.rename(newDirectoryPath);
+      oldParts[i] = newParts[i];
+    }
   }
 
   @override

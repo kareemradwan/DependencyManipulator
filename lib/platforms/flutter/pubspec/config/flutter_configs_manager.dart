@@ -54,20 +54,23 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
   @override
   Future<void> pubGet() async {
     final projectDir = Directory(_pubspecFile.parent.path);
-    final exists = await projectDir.exists();
-    if (!exists) {
-      throw Exception('Project directory not found');
+    final originalWorkingDirectory = Directory.current;
+
+    try {
+      Directory.current = projectDir.path;
+      final pubGetProcessResult = await Process.run('flutter', ['pub', 'get']);
+
+      if (pubGetProcessResult.exitCode != 0) {
+        throw Exception(
+            'Failed to run flutter pub get: ${pubGetProcessResult.stderr}');
+      }
+      if (_printToConsole) {
+        stdout.write(pubGetProcessResult.stdout);
+      }
+      stderr.write(pubGetProcessResult.stderr);
+    } finally {
+      Directory.current = originalWorkingDirectory;
     }
-    final pubGetProcessResult = await Process.run('flutter', [
-      'pub',
-      'get',
-      '--directory',
-      projectDir.path,
-    ]);
-    if (_printToConsole) {
-      stdout.write(pubGetProcessResult.stdout);
-    }
-    stderr.write(pubGetProcessResult.stderr);
   }
 
   @override
@@ -77,14 +80,19 @@ class FlutterConfigsManager implements FlutterConfigsInterface {
     if (!exists) {
       throw Exception('lib directory not found');
     }
-    final formatProcessResult = await Process.run('dart', [
-      'format',
-      projectDir.path,
-    ]);
+    final originalWorkingDirectory = Directory.current;
+    try {
+      Directory.current = projectDir.path;
+      final formatProcessResult = await Process.run('dart', [
+        'format',
+        projectDir.path,
+      ]);
 
-    if (_printToConsole) {
-      stdout.write(formatProcessResult.stdout);
+      if (_printToConsole) {
+        stdout.write(formatProcessResult.stdout);
+      }
+    } finally {
+      Directory.current = originalWorkingDirectory;
     }
-    stderr.write(formatProcessResult.stderr);
   }
 }
